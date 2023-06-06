@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { login} from '@/api/login'
+
 
 export default {
     data() {
@@ -39,15 +41,27 @@ export default {
     },
     methods:{
         submitForm(){
-            this.$message.success('成功')
-            // 发起请求
             this.loading=true
+            this.$message.success('登录成功！')
+            // 发起请求
+            login(this.form).then(res=>{
+                const ms_user = {
+                    permission:['/home','/login'],
+                    name:'admin'
+                }
+                // 存cookie
+                sessionStorage.setItem("ms_user",JSON.stringify(ms_user))
+                sessionStorage.setItem("token",res.data)
+                // 跳转
+                this.$router.push('/')
+            })
+
         }
     }
 }
 </script>
 
-<style >
+<style scoped>
 .common-layout {
     background: url('@/assets/background/desola-lanre-ologun-zYgV-NGZtlA-unsplash.jpg');
     width: 100%;
